@@ -1,0 +1,48 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build GLFW/GLEW Simulation",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "${file}",
+                "src/gl.c",
+                "-I ./glad/include",
+                "-lglfw",
+                "-lGL",
+                "-o",
+                "simulation"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Compile C file with GLFW, GL, and GLEW libraries"
+        },
+        {
+            "label": "Build C++ Program (g++)",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "physics.cpp",
+                "headers/collision.cpp",
+                "-lSDL3",
+                "-lSDL3_ttf",
+                "-o",
+                "simulation"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
