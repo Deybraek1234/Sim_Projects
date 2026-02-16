@@ -1,9 +1,8 @@
+#pragma once
 #ifndef collisions_h
 #define collisions_h
-#include<vector>
+#include <Eigen/Core>
 
-typedef std::vector<double> vec;
-
-void collision_detection(vec& position_x, vec& position_y, vec& velocity_x, vec& velocity_y, int n_particles);
+void wall_collision_check(Particle& particle);
 
 #endif

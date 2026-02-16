@@ -6,7 +6,7 @@ INC_DIR=include
 
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 
-CCFLAGS = $(shell pkg-config --cflags sdl3) -I$(INC_DIR) -g -fsanitize=address
+CCFLAGS = $(shell pkg-config --cflags sdl3 eigen3) -I$(INC_DIR) -g -O3 -march=x86-64-v3 -fsanitize=address
 LDFLAGS = -lSDL3 -lSDL3_ttf
 
 all: $(TARGET)

@@ -20,6 +20,7 @@ pkgs.mkShell {
   sdl3-ttf 
   libGL
   vulkan-loader
+  eigen
   ];
 
   shellHook = ''

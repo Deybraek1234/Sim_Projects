@@ -1,34 +1,21 @@
-#include "collision.h"
+#include "particle.h"
+#include "window.h"
+#include <Eigen/Core>
 
-typedef std::vector<double> vec;
-int window_width = 1920;
-int window_height = 1080;
-const int x_limit_left = -(window_width/2);
-const int x_limit_right = window_width/2;
-const int y_limit_low = 0;
-const int y_limit_high = window_height;
-void collision_detection(vec& position_x, vec& position_y, vec& velocity_x, vec& velocity_y, int n_particles){
+typedef Eigen::Vector2f vec2;
 
-      for(int i=0;i<n_particles;i++){
-            if(position_x[i] < x_limit_left){
-                  position_x[i] = x_limit_left;
-                  velocity_x[i] = -1*velocity_x[i]*0.9;
-            };
+void wall_collision_check(Particle& particle){
+      vec2 screen_bounds = {screen.width/PPM, screen.height/PPM};
 
-            if(position_x[i] > x_limit_right){
-                  position_x[i] = x_limit_right;
-                  velocity_x[i] = -1*velocity_x[i]*0.9;
-            };
+      auto hit_low = particle.position.array() < 0;
+      auto hit_high = particle.position.array() > screen_bounds.array();
 
-            if(position_y[i] < y_limit_low){
-                  position_y[i] = y_limit_low;
-                  velocity_y[i] = -1*velocity_y[i]*0.9;
-            };
+      float damping = 0.95f;
 
-            if(position_y[i] > y_limit_high){
-                  position_y[i] = y_limit_high;
-                  velocity_y[i] = -1*velocity_y[i]*0.9;
-            };
-      }
-
+      vec2 flip_factors = (hit_low || hit_high).select(
+            Eigen::Vector2f::Constant(-damping), 
+            Eigen::Vector2f::Constant(1.0f)
+      );
+      particle.velocity = particle.velocity.cwiseProduct(flip_factors);
+      particle.position = particle.position.cwiseMax(0).cwiseMin(screen_bounds);
 }
