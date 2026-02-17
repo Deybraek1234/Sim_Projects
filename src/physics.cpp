@@ -8,7 +8,7 @@
 #include "window.h"
 
 //definitions
-const double dt = 600.0f;
+const double dt = 0.01;
 Screen screen = {1920, 1080};
 
 int main(){
@@ -33,17 +33,26 @@ int main(){
 
     Particle sun;
     sun.position = {0.0f, 0.0f};
+    sun.velocity = {0.0f, -0.1f};
     sun.radius = 6.957e8f;
-    sun.mass = 1.9891E30;
+    sun.mass = 2.0e29f;
     sun.color = {255, 165, 0, 255};
     
     Particle planet1;
-    planet1.position = {1.5e9f, 0.0f};
-    planet1.velocity = {0.0, 27000};
-    planet1.radius = 7e7f;
-    planet1.mass = 5.9722E24;
+    planet1.position = {1.5e10f, 0.0f};
+    planet1.velocity = {0.0, 30000.0f};
+    planet1.radius = 1.0e8f;
+    planet1.mass = 2.0e24;
     planet1.color = {51, 153, 255, 255};
-   
+  
+    //initialize accelerations
+    vec2 r_init = sun.position - planet1.position;
+    float dist_sq_init = r_init.squaredNorm();
+    float f_mag_init = (G*sun.mass*planet1.mass) / dist_sq_init;
+    vec2 f_vec_init = r_init.normalized() * f_mag_init;
+
+    planet1.acceleration = f_vec_init / planet1.mass;
+    sun.acceleration = -f_vec_init / sun.mass;
     //main loop
     while(running){
         Uint64 new_time = SDL_GetTicks();
@@ -69,18 +78,26 @@ int main(){
         }
 
         while (accumulator >= dt) {
-            vec2 old_acceleration = planet1.acceleration;
-            planet1.position += planet1.velocity * dt + 0.5f * old_acceleration * dt * dt;
+            planet1.position += planet1.velocity * dt + 0.5f * planet1.acceleration * dt * dt;
+            sun.position += sun.velocity * dt + 0.5f * sun.acceleration * dt * dt;
+
+            vec2 old_p1_acceleration = planet1.acceleration;
+            vec2 old_sun_acceleration = sun.acceleration;
+            
             vec2 r_vector = sun.position - planet1.position;
+
             float distance_squared = r_vector.squaredNorm();
+            
             if(distance_squared > 0.01f) {
-                float distance = sqrt(distance_squared);
-                float acc_magnitude = (G*sun.mass)/distance_squared;                
-                planet1.acceleration = r_vector / distance * acc_magnitude;
-            } else{
-                planet1.acceleration = vec2(0,0);
-            }
-            planet1.velocity += 0.5f * (old_acceleration + planet1.acceleration) * dt;
+                float force_mag = (G * sun.mass * planet1.mass) / distance_squared;
+                vec2 force_vec = r_vector.normalized() * force_mag;
+
+                planet1.acceleration = force_vec / planet1.mass;
+                sun.acceleration = -force_vec / sun.mass;
+            };
+
+            planet1.velocity += 0.5f * (old_p1_acceleration + planet1.acceleration) * dt;
+            sun.velocity += 0.5f * (old_sun_acceleration + sun.acceleration) * dt;
 
             //increment time
             total_time += dt;

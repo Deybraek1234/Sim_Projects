@@ -24,4 +24,4 @@ public:
 };
 
 const float PPM = 3e-8f;
-const float G = 6.6743E-11;
+const float G = 6.674e-11f;
