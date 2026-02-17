@@ -30,7 +30,7 @@ bool set_font(SDL_Renderer*& renderer){
 
 void draw_particle(SDL_Renderer*& renderer, const Particle& particle){
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderPoint(renderer, particle.position.x()*PPM, particle.position.y()*PPM);
+    SDL_RenderPoint(renderer, particle.position.x(), particle.position.y());
 }
 
 void refresh_window(SDL_Renderer*& renderer){
@@ -46,11 +46,14 @@ void destroy_window(SDL_Renderer*& renderer, SDL_Surface*& textSurface, SDL_Text
     SDL_RenderPresent(renderer);
 }
 
-void draw_circle(SDL_Renderer*& renderer, const Particle& planet){
-    for (int w = -planet.radius; w <= planet.radius; w++){
-        for(int h = -planet.radius; h <=planet.radius; h++){
-            if(w*w + h*h <= planet.radius*planet.radius){
-                SDL_RenderPoint(renderer, planet.position.x() + w, planet.position.y() + h);
+void draw_circle(SDL_Renderer*& renderer, const Particle& planet, SDL_Color color){
+    int radius_pixels = (int)(planet.radius*PPM);
+    SDL_SetRenderDrawColor(renderer, planet.color.r, planet.color.g, planet.color.b, planet.color.a);
+
+    for (int w = -radius_pixels; w <= radius_pixels; w++){
+        for(int h = -radius_pixels; h <=radius_pixels; h++){
+            if(w*w + h*h <= radius_pixels*radius_pixels){
+                SDL_RenderPoint(renderer, int(planet.position.x()*PPM + screen.width/2 + w), int(planet.position.y()*PPM + screen.height/2 + h));
             }
         }
     }

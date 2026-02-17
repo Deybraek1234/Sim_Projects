@@ -16,7 +16,7 @@ void refresh_window(SDL_Renderer*& renderer);
 
 void destroy_window(SDL_Renderer*& renderer, SDL_Surface*& textSurface, SDL_Texture*& textTexture, float textW, float textH);
 
-void draw_circle(SDL_Renderer*& renderer, const Particle& planet);
+void draw_circle(SDL_Renderer*& renderer, const Particle& planet, SDL_Color color);
 
 struct Screen {int width; int height;};
 extern Screen screen;

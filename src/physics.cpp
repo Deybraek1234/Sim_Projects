@@ -8,7 +8,7 @@
 #include "window.h"
 
 //definitions
-const double dt = 0.002;
+const double dt = 600.0f;
 Screen screen = {1920, 1080};
 
 int main(){
@@ -31,18 +31,28 @@ int main(){
     double accumulator = 0.0;
     double total_time = 0.0;
 
-   Particle sun;
-   sun.radius = 6.0f;
-   sun.mass = 1.9891E2;
+    Particle sun;
+    sun.position = {0.0f, 0.0f};
+    sun.radius = 6.957e8f;
+    sun.mass = 1.9891E30;
+    sun.color = {255, 165, 0, 255};
+    
+    Particle planet1;
+    planet1.position = {1.5e9f, 0.0f};
+    planet1.velocity = {0.0, 27000};
+    planet1.radius = 7e7f;
+    planet1.mass = 5.9722E24;
+    planet1.color = {51, 153, 255, 255};
    
     //main loop
     while(running){
         Uint64 new_time = SDL_GetTicks();
-        double frame_time = (new_time - current_time) / 1000.0;
+        double frame_time = (new_time - current_time)/1000.0;;
         current_time = new_time;
 
         if(frame_time > 0.25) frame_time = 0.25;
-        accumulator += frame_time;
+        double timescale = 20000.0;
+        accumulator += frame_time * timescale;
 
         while (SDL_PollEvent(&event)){
             switch(event.type){
@@ -59,23 +69,31 @@ int main(){
         }
 
         while (accumulator >= dt) {
-            vec2 a_curr = {0.0, 0};
-            sun.position += sun.velocity*dt + 0.5*a_curr*dt*dt;
-            vec2 a_new = {0.0, 0};
-            sun.velocity += 0.5*(a_curr + a_new)*dt;
-        
+            vec2 old_acceleration = planet1.acceleration;
+            planet1.position += planet1.velocity * dt + 0.5f * old_acceleration * dt * dt;
+            vec2 r_vector = sun.position - planet1.position;
+            float distance_squared = r_vector.squaredNorm();
+            if(distance_squared > 0.01f) {
+                float distance = sqrt(distance_squared);
+                float acc_magnitude = (G*sun.mass)/distance_squared;                
+                planet1.acceleration = r_vector / distance * acc_magnitude;
+            } else{
+                planet1.acceleration = vec2(0,0);
+            }
+            planet1.velocity += 0.5f * (old_acceleration + planet1.acceleration) * dt;
+
             //increment time
             total_time += dt;
             accumulator -= dt;
         }
+        
         refresh_window(renderer);
-        draw_circle(renderer, sun);
-        Particle particle;
-        draw_particle(renderer, particle);
+        draw_circle(renderer, sun, sun.color);
+        draw_circle(renderer, planet1, planet1.color);
 
         //text
         std::stringstream ss;
-        ss << total_time << "s";
+        ss << total_time/60 << "m";
         std::string time_string = ss.str();
         SDL_Color textColor = {255, 255, 255, 255};
 
@@ -87,4 +105,3 @@ int main(){
         destroy_window(renderer, textSurface, textTexture, textW, textH);
     };
 };
-
