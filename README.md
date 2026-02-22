@@ -1,1 +1,1 @@
-Mini Project I hope to keep working on
+Repository for all of my c projects I hope to work on

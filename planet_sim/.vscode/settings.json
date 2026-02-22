@@ -1,0 +1,8 @@
+{
+    "C_Cpp.errorSquiggles": "disabled"
+    "editor.quickSuggestions": {
+        "other": "off",
+        "comments": "off",
+        "strings": "off"
+    },
+}

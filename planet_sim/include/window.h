@@ -1,3 +1,4 @@
+#pragma once
 #ifndef window_h
 #define window_h
 #include <SDL3/SDL.h>

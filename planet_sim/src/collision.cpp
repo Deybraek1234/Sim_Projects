@@ -5,7 +5,7 @@
 typedef Eigen::Vector2f vec2;
 
 void wall_collision_check(Particle& particle){
-      vec2 screen_bounds = {screen.width/PPM, screen.height/PPM};
+      vec2 screen_bounds = {screen.width/scale_factor, screen.height/scale_factor};
 
       auto hit_low = particle.position.array() < 0;
       auto hit_high = particle.position.array() > screen_bounds.array();

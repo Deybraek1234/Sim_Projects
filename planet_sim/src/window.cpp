@@ -47,13 +47,13 @@ void destroy_window(SDL_Renderer*& renderer, SDL_Surface*& textSurface, SDL_Text
 }
 
 void draw_circle(SDL_Renderer*& renderer, const Particle& planet, SDL_Color color){
-    int radius_pixels = (int)(planet.radius*PPM);
+    int radius_pixels = (int)(planet.radius*scale_factor);
     SDL_SetRenderDrawColor(renderer, planet.color.r, planet.color.g, planet.color.b, planet.color.a);
 
     for (int w = -radius_pixels; w <= radius_pixels; w++){
         for(int h = -radius_pixels; h <=radius_pixels; h++){
             if(w*w + h*h <= radius_pixels*radius_pixels){
-                SDL_RenderPoint(renderer, int(planet.position.x()*PPM + screen.width/2 + w), int(planet.position.y()*PPM + screen.height/2 + h));
+                SDL_RenderPoint(renderer, int(planet.position.x()*scale_factor + screen.width/2 + w), int(planet.position.y()*scale_factor + screen.height/2 + h));
             }
         }
     }
