@@ -1,1 +1,1 @@
-Repository for all of my c projects I hope to work on
+Repository for all of my code projects I hope to work on
