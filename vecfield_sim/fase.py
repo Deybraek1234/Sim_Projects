@@ -70,7 +70,7 @@ def Main():
         vec1 = [tempx, tempy]
         vec2 = [x_traj[i], y_traj[i]]
 
-        if( np.linalg.norm(abs(np.subtract(vec1, vec2))) < 0.00001):
+        if(np.linalg.norm(tempx - x_traj[i], tempy - y_traj[i]) < 0.00001):
             print("Punto equilibrio")
             break
             
@@ -78,7 +78,8 @@ def Main():
         y_traj.append(tempy)
 
         trajectory_line.set_data(x_traj,y_traj)
-        plot.pause(0.01)
+        if i % 5 ==0:
+                plot.pause(0.01)
     print(nsteps)
     trajectory_line.set_color('r')
     plot.ioff()
