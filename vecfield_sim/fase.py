@@ -5,7 +5,7 @@ import math
 
 px = 1/plot.rcParams['figure.dpi']
 x, y = sp.symbols('x y')
-dt = 0.01
+dt = 0.1
 
 
 while True:
@@ -18,7 +18,7 @@ while True:
         print("Bad Syntax")
 
 while True:
-    user_input = input("Input y velocity:") or "-1*sin(x)"
+    user_input = input("Input y velocity:") or "(1-x**2)*y-x" 
     #"(1-x**2)*y-x" particle
     try:
         v_func = sp.lambdify((x,y), sp.simplify(user_input), modules='numpy')
