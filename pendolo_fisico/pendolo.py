@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plot
 import matplotlib.animation as animation
 from matplotlib.widgets import Button, Slider
+import time
 
 px = 1/plot.rcParams['figure.dpi']
 # set up figures/rod/bobs/dots on graphs
@@ -31,7 +32,9 @@ baxis = fig2.add_axes([0.90, 0.01, 0.1, 0.075])
 breset = Button(baxis, "Reset")
 
 def Main():
+    start_time = time.time()
     theta_history, omega_history, time_history = update_data()
+    print(time.time() - start_time)
 
     x = []
     y = []
