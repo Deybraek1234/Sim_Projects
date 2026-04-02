@@ -9,7 +9,7 @@ dt = 0.1
 
 
 while True:
-    user_input = input("Input x velocity:") or "y"
+    user_input = input("Input x velocity:") or "x+np.exp(-y)"
     #"y" particle
     try:
         u_func = sp.lambdify((x,y), sp.simplify(user_input), modules='numpy')
@@ -18,13 +18,14 @@ while True:
         print("Bad Syntax")
 
 while True:
-    user_input = input("Input y velocity:") or "(1-x**2)*y-x" 
+    user_input = input("Input y velocity:") or "-y" 
     #"(1-x**2)*y-x" particle
     try:
         v_func = sp.lambdify((x,y), sp.simplify(user_input), modules='numpy')
         break
     except:
         print("Bad Syntax")
+
 
 def Main():
     #setup points
